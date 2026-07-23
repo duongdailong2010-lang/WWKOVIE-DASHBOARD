@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WWTP Operations Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0e0e10; --panel:#18181b; --panel2:#1f1f22; --border:#2b2b2f;
+    --orange:#f5811f; --orange2:#ff9a44; --white:#f5f5f5; --gray:#9aa0a6;
+    --gray2:#6b7077; --green:#3ecf8e; --red:#e5484d;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--white);font-family:'Segoe UI', Inter, Arial, sans-serif;font-size:13px;}
+
+  /* ============ LOGIN SCREEN ============ */
+  #loginScreen{
+    position:fixed;inset:0;background:radial-gradient(circle at 30% 20%, #1c1c1f, #0a0a0b 70%);
+    display:flex;align-items:center;justify-content:center;z-index:999;
+  }
+  .login-box{
+    width:340px;background:var(--panel);border:1px solid var(--border);
+    border-radius:16px;padding:32px 28px;text-align:center;
+  }
+  .login-box .logo{
+    width:64px;height:64px;border-radius:50%;background:#111;border:2px solid var(--orange);
+    display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;
+  }
+  .login-box h2{margin:0 0 4px;font-size:16px;font-weight:800;}
+  .login-box h2 span{color:var(--orange);}
+  .login-box p.sub{color:var(--gray);font-size:11px;margin:0 0 22px;}
+  .login-box input{
+    width:100%;padding:11px 12px;margin-bottom:10px;border-radius:8px;
+    border:1px solid var(--border);background:var(--panel2);color:var(--white);font-size:13px;
+  }
+  .login-box input:focus{outline:none;border-color:var(--orange);}
+  .login-box button{
+    width:100%;padding:11px;border:none;border-radius:8px;background:var(--orange);
+    color:#151515;font-weight:800;font-size:13px;cursor:pointer;margin-top:6px;
+  }
+  .login-box button:disabled{opacity:.6;cursor:default;}
+  .login-msg{font-size:11px;color:var(--red);margin-top:10px;min-height:14px;}
+  .login-demo{margin-top:14px;font-size:10.5px;color:var(--gray2);cursor:pointer;text-decoration:underline;}
+  .api-cfg{
+    margin-top:16px;font-size:9.5px;color:var(--gray2);border-top:1px solid var(--border);
+    padding-top:10px;line-height:1.5;text-align:left;
+  }
+
+  /* ============ APP LAYOUT ============ */
+  .app{display:none;min-height:100vh;}
+  .app.visible{display:flex;}
+  .sidebar{width:210px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .brand-logo{width:52px;height:52px;border-radius:50%;background:#111;border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;font-size:20px;}
+  .brand-name{font-weight:800;font-size:13px;line-height:1.2;}
+  .brand-name span{color:var(--orange);}
+  .brand-tag{font-size:10.5px;color:var(--gray);margin:10px 0 16px;line-height:1.4;}
+
+  .userbadge{
+    display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--border);
+    border-radius:10px;padding:8px 10px;margin-bottom:14px;
+  }
+  .userbadge .av{width:28px;height:28px;border-radius:50%;background:var(--orange);color:#151515;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+  .userbadge .info b{display:block;font-size:11.5px;}
+  .userbadge .info span{font-size:9.5px;color:var(--gray);}
+  .logout-btn{margin-left:auto;background:none;border:none;color:var(--gray2);cursor:pointer;font-size:13px;}
+
+  .nav{display:flex;flex-direction:column;gap:2px;flex:1;}
+  .nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--gray);text-decoration:none;font-size:12.5px;font-weight:600;}
+  .nav a.active{background:var(--orange);color:#151515;}
+  .nav a .ic{width:16px;text-align:center;}
+
+  .insights{background:rgba(245,129,31,0.08);border:1px solid rgba(245,129,31,0.35);border-radius:10px;padding:12px;margin-top:16px;}
+  .insights h4{color:var(--orange);font-size:11px;letter-spacing:.5px;margin:0 0 8px;}
+  .insights ul{margin:0;padding:0;list-style:none;}
+  .insights li{font-size:11px;color:#d8d8d8;margin-bottom:8px;padding-left:12px;position:relative;line-height:1.4;}
+  .insights li:before{content:"•";color:var(--orange);position:absolute;left:0;}
+
+  .dataasof{margin-top:14px;font-size:10.5px;color:var(--gray2);display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
+
+  .main{flex:1;padding:20px 24px;overflow-x:hidden;}
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
+  .title h1{font-size:26px;margin:0;font-weight:800;letter-spacing:.3px;}
+  .title h1 span{color:var(--orange);}
+  .title p{margin:4px 0 0;color:var(--gray);font-size:12px;}
+  .filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .filter{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--gray);min-width:110px;}
+  .filter b{display:block;color:var(--white);font-size:12px;margin-top:2px;}
+  .reset{background:var(--orange);color:#151515;font-weight:700;border:none;border-radius:8px;padding:10px 16px;font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;}
+  .kpi-top{display:flex;align-items:center;gap:8px;}
+  .kpi-icon{width:32px;height:32px;border-radius:50%;background:rgba(245,129,31,0.12);color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+  .kpi-label{font-size:10px;letter-spacing:.6px;color:var(--gray);font-weight:700;}
+  .kpi-value{font-size:21px;font-weight:800;}
+  .kpi-delta{font-size:11px;font-weight:700;}
+  .kpi-delta.up{color:var(--green);}
+  .kpi-delta.down{color:var(--red);}
+  .kpi-sub{font-size:10px;color:var(--gray2);}
+
+  .row{display:grid;gap:12px;margin-bottom:12px;}
+  .row-4{grid-template-columns:repeat(4,1fr);}
+  .row-tbl{grid-template-columns:1.7fr 1fr 1fr;}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;}
+  .panel h3{margin:0 0 10px;font-size:11.5px;letter-spacing:.5px;color:var(--orange);display:flex;align-items:center;justify-content:space-between;font-weight:800;}
+  .chart-wrap{position:relative;flex:1;min-height:180px;}
+  .legend{display:flex;flex-direction:column;gap:6px;margin-top:8px;font-size:10.5px;}
+  .legend .item{display:flex;justify-content:space-between;gap:6px;}
+  .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
+  .legend .name{color:var(--gray);flex:1;}
+  .legend .val{color:var(--white);font-weight:700;}
+  .donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+  .donut-center b{font-size:16px;display:block;}
+  .donut-center span{font-size:9.5px;color:var(--gray);}
+
+  table{width:100%;border-collapse:collapse;font-size:11px;}
+  th{text-align:left;color:var(--gray);font-weight:700;font-size:10px;padding:6px 4px;border-bottom:1px solid var(--border);}
+  td{padding:6px 4px;border-bottom:1px solid #232326;}
+  tr.total td{font-weight:800;color:var(--white);border-top:1px solid var(--border);}
+  tr.sub td{color:var(--gray);font-size:10.3px;}
+  .up-txt{color:var(--green);font-weight:700;}
+  .down-txt{color:var(--red);font-weight:700;}
+
+  .bar-item{margin-bottom:10px;}
+  .bar-item .lbl{display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:4px;color:var(--gray);}
+  .bar-item .lbl b{color:var(--white);}
+  .bar-track{background:#2a2a2d;border-radius:6px;height:9px;overflow:hidden;}
+  .bar-fill{background:linear-gradient(90deg,var(--orange),var(--orange2));height:100%;border-radius:6px;}
+
+  .footer{margin-top:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:grid;grid-template-columns:1.1fr 1.1fr 1.3fr 1.1fr;gap:18px;}
+  .footer .col{display:flex;gap:10px;}
+  .footer .col h4{color:var(--orange);font-size:12px;margin:0 0 8px;}
+  .footer .col p, .footer .col li{font-size:11px;color:#d0d0d0;line-height:1.5;}
+  .footer .col ul{margin:0;padding-left:16px;}
+  .footer .cta{font-weight:700;color:var(--white);}
+  .footer .social{display:flex;gap:12px;font-size:10.5px;color:var(--gray);margin-top:6px;flex-wrap:wrap;}
+  .fic{width:34px;height:34px;border-radius:50%;background:rgba(245,129,31,0.12);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:15px;flex-shrink:0;}
+
+  #loadingOverlay{
+    position:fixed;inset:0;background:rgba(10,10,11,.85);display:flex;align-items:center;justify-content:center;
+    z-index:998;color:var(--gray);font-size:13px;
+  }
+
+  @media (max-width:1000px){
+    .kpi-row{grid-template-columns:repeat(3,1fr);}
+    .row-4{grid-template-columns:repeat(2,1fr);}
+    .row-tbl{grid-template-columns:1fr;}
+    .footer{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:640px){
+    .app.visible{flex-direction:column;}
+    .sidebar{width:100%;}
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .row-4{grid-template-columns:1fr;}
+    .footer{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN SCREEN ================= -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="logo">💧</div>
+    <h2>AQUA <span>ANALYTICS</span></h2>
+    <p class="sub">Đăng nhập để xem Dashboard Vận hành Xử lý Nước thải</p>
+    <input type="text" id="username" placeholder="Tài khoản">
+    <input type="password" id="password" placeholder="Mật khẩu">
+    <button id="loginBtn" onclick="doLogin()">Đăng nhập</button>
+    <div class="login-msg" id="loginMsg"></div>
+    <div class="login-demo" onclick="loadDemo()">Xem thử với dữ liệu demo (bỏ qua đăng nhập)</div>
+    <div class="api-cfg">
+      🔧 Backend: <span id="apiStatus">chưa cấu hình API_URL</span><br>
+      Sửa biến <code>API_URL</code> ở đầu script để nối với Google Apps Script của bạn.
+    </div>
+  </div>
+</div>
+
+<div id="loadingOverlay" style="display:none;">⏳ Đang tải dữ liệu từ Google Sheets...</div>
+
+<!-- ================= APP ================= -->
+<div class="app" id="app">
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">💧</div>
+      <div class="brand-name">AQUA ANALYTICS<br><span>WWTP DASHBOARD</span></div>
+    </div>
+    <div class="brand-tag">Theo dõi hiệu suất. Phân tích xu hướng. Tối ưu vận hành.</div>
+
+    <div class="userbadge">
+      <div class="av" id="userAv">?</div>
+      <div class="info"><b id="userName">—</b><span id="userRole">—</span></div>
+      <button class="logout-btn" onclick="doLogout()" title="Đăng xuất">⏻</button>
+    </div>
+
+    <div class="nav">
+      <a class="active"><span class="ic">🏠</span> Tổng quan</a>
+      <a><span class="ic">📊</span> Báo cáo Vận hành</a>
+      <a><span class="ic">💧</span> Phân tích Lưu lượng</a>
+      <a><span class="ic">⚙️</span> Phân tích Năng lượng</a>
+      <a><span class="ic">🧪</span> Chất lượng Xử lý</a>
+      <a><span class="ic">📈</span> Phân tích Xu hướng</a>
+      <a><span class="ic">🎯</span> Kế hoạch vs Thực tế</a>
+      <a><span class="ic">🔀</span> Phân tích Chênh lệch</a>
+      <a><span class="ic">📄</span> Báo cáo</a>
+      <a><span class="ic">🔔</span> Cảnh báo</a>
+      <a><span class="ic">⚡</span> Cài đặt</a>
+    </div>
+
+    <div class="insights">
+      <h4>KEY INSIGHTS</h4>
+      <ul id="insightsList">
+        <li>Đang tải insight...</li>
+      </ul>
+    </div>
+
+    <div class="dataasof">📅 Cập nhật: <span id="dataAsOf">—</span></div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="title">
+        <h1>PHÂN TÍCH <span>VẬN HÀNH XỬ LÝ NƯỚC THẢI</span></h1>
+        <p>Real-time Overview of Wastewater Treatment Performance</p>
+      </div>
+      <div class="filters">
+        <div class="filter">📅 Khoảng thời gian<b>01/01 – 31/05/2026</b></div>
+        <div class="filter">🏭 Nhà máy<b>Tất cả</b></div>
+        <div class="filter">🔧 Dây chuyền<b>Tất cả</b></div>
+        <div class="filter">📏 Đơn vị<b>m³ / mg/L</b></div>
+        <button class="reset" onclick="refreshData()">🔄 Làm mới dữ liệu</button>
+      </div>
+    </div>
+
+    <div class="kpi-row" id="kpiRow"></div>
+
+    <div class="row row-4">
+      <div class="panel"><h3>LƯU LƯỢNG & BOD ĐẦU RA</h3><div class="chart-wrap"><canvas id="flowTrend"></canvas></div></div>
+      <div class="panel"><h3>THÀNH PHẦN NƯỚC THẢI ĐẦU VÀO</h3>
+        <div class="chart-wrap"><canvas id="influentDonut"></canvas><div class="donut-center" id="influentCenter"><b>—</b><span>Tổng lưu lượng</span></div></div>
+        <div class="legend" id="legend1"></div>
+      </div>
+      <div class="panel"><h3>CƠ CẤU CHI PHÍ VẬN HÀNH (O&M)</h3>
+        <div class="chart-wrap"><canvas id="costDonut"></canvas><div class="donut-center" id="costCenter"><b>—</b><span>Tổng chi phí O&M</span></div></div>
+        <div class="legend" id="legend2"></div>
+      </div>
+      <div class="panel"><h3>XU HƯỚNG HIỆU SUẤT XỬ LÝ (%)</h3><div class="chart-wrap"><canvas id="efficiencyTrend"></canvas></div></div>
+    </div>
+
+    <div class="row row-tbl">
+      <div class="panel">
+        <h3>BẢNG TỔNG HỢP VẬN HÀNH (Operating Summary)</h3>
+        <table>
+          <thead><tr><th>Chỉ tiêu</th><th>Kỳ này</th><th>Kỳ trước</th><th>Chênh lệch</th><th>%</th></tr></thead>
+          <tbody id="summaryBody"></tbody>
+        </table>
+      </div>
+      <div class="panel"><h3>ĐÓNG GÓP LƯU LƯỢNG THEO DÂY CHUYỀN</h3><div id="lineContribution"></div></div>
+      <div class="panel"><h3>PHÂN TÍCH CHÊNH LỆCH CHI PHÍ (so với năm trước)</h3><div class="chart-wrap"><canvas id="waterfall"></canvas></div></div>
+    </div>
+
+    <div class="row row-4">
+      <div class="panel"><h3>LƯU LƯỢNG THEO THÁNG (m³)</h3><div class="chart-wrap"><canvas id="volMonth"></canvas></div></div>
+      <div class="panel"><h3>XU HƯỚNG LIỀU HÓA CHẤT (kg/ngày)</h3><div class="chart-wrap"><canvas id="chemTrend"></canvas></div></div>
+      <div class="panel"><h3>HIỆU SUẤT LOẠI BỎ THEO THÁNG (%)</h3><div class="chart-wrap"><canvas id="effMonth"></canvas></div></div>
+      <div class="panel">
+        <h3>TUÂN THỦ vs MỤC TIÊU (YTD)</h3>
+        <div class="chart-wrap"><canvas id="gauge"></canvas></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-top:4px;" id="complianceLine"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="col"><div class="fic">🎯</div><div><h4>KEY TAKEAWAYS</h4>
+        <p>Hiệu suất xử lý ổn định, tỷ lệ tuân thủ xả thải cải thiện rõ rệt. Năng lượng được kiểm soát tốt trong khi chi phí hóa chất cần theo dõi sát.</p></div></div>
+      <div class="col"><div class="fic">📈</div><div><h4>FOCUS AREAS</h4>
+        <ul><li>Tối ưu liều lượng hóa chất</li><li>Giảm chi phí xử lý bùn thải</li><li>Cải thiện hiệu suất năng lượng bơm/sục khí</li></ul></div></div>
+      <div class="col"><div class="fic">💧</div><div><h4>DATA-DRIVEN DECISIONS. BETTER RESULTS.</h4>
+        <p class="cta">Dữ liệu được đồng bộ trực tiếp từ Google Sheets nội bộ nhà máy.</p></div></div>
+      <div class="col"><div class="fic">👥</div><div><h4>TRUY CẬP</h4>
+        <div class="social">Điện thoại · iPad · Laptop</div>
+        <div class="social">Đăng nhập bằng tài khoản được cấp bởi quản trị viên</div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   CẤU HÌNH: dán URL Web App Google Apps Script của bạn vào đây
+   Ví dụ: "https://script.google.com/macros/s/AKfycb.../exec"
+   ================================================================ */
+const API_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+let currentUser = null;
+let charts = {};
+document.getElementById('apiStatus').textContent = isApiConfigured() ? 'đã cấu hình' : 'chưa cấu hình API_URL (đang ở chế độ demo)';
+
+function isApiConfigured(){
+  return API_URL && API_URL.indexOf('PASTE_YOUR') === -1;
+}
+
+async function doLogin(){
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const msg = document.getElementById('loginMsg');
+  const btn = document.getElementById('loginBtn');
+  msg.textContent = '';
+
+  if(!username || !password){ msg.textContent = 'Vui lòng nhập đầy đủ tài khoản và mật khẩu'; return; }
+
+  if(!isApiConfigured()){
+    msg.textContent = 'Chưa cấu hình API_URL — bấm "Xem thử với dữ liệu demo" bên dưới để dùng thử.';
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Đang kiểm tra...';
+  try{
+    const res = await fetch(API_URL, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'}, // tránh CORS preflight với Apps Script
+      body: JSON.stringify({action:'login', username, password})
+    });
+    const data = await res.json();
+    if(data.success){
+      currentUser = data;
+      enterApp();
+      await loadRealData();
+    } else {
+      msg.textContent = data.message || 'Sai tài khoản hoặc mật khẩu';
+    }
+  }catch(err){
+    msg.textContent = 'Không kết nối được tới Apps Script. Kiểm tra lại URL / quyền deploy.';
+  }
+  btn.disabled = false; btn.textContent = 'Đăng nhập';
+}
+
+function loadDemo(){
+  currentUser = {fullname:'Người dùng Demo', role:'Xem thử', username:'demo'};
+  enterApp();
+  renderDashboard(DEMO_DATA);
+}
+
+function enterApp(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  document.getElementById('userName').textContent = currentUser.fullname || currentUser.username;
+  document.getElementById('userRole').textContent = currentUser.role || '';
+  document.getElementById('userAv').textContent = (currentUser.fullname || currentUser.username || '?').charAt(0).toUpperCase();
+}
+
+function doLogout(){
+  currentUser = null;
+  Object.values(charts).forEach(c=>c.destroy());
+  charts = {};
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('username').value='';
+  document.getElementById('password').value='';
+}
+
+async function loadRealData(){
+  document.getElementById('loadingOverlay').style.display = 'flex';
+  try{
+    const res = await fetch(API_URL + '?action=getData');
+    const data = await res.json();
+    renderDashboard(data);
+  }catch(err){
+    alert('Không tải được dữ liệu từ Google Sheets. Đang hiển thị dữ liệu demo tạm thời.');
+    renderDashboard(DEMO_DATA);
+  }
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+function refreshData(){
+  if(isApiConfigured() && currentUser && currentUser.username !== 'demo'){ loadRealData(); }
+}
+
+/* ================= RENDER DASHBOARD FROM DATA OBJECT ================= */
+function renderDashboard(d){
+  Object.values(charts).forEach(c=>c.destroy());
+  charts = {};
+
+  document.getElementById('dataAsOf').textContent = d.updatedAt ? new Date(d.updatedAt).toLocaleDateString('vi-VN') : '—';
+
+  // KPIs
+  const kpiRow = document.getElementById('kpiRow');
+  kpiRow.innerHTML = (d.kpis||[]).map(k=>`
+    <div class="kpi">
+      <div class="kpi-top"><div class="kpi-icon">${k.icon||'📊'}</div><div class="kpi-label">${k.label}</div></div>
+      <div class="kpi-value">${k.value}</div>
+      <div class="kpi-delta ${k.delta_type==='down'?'down':'up'}">${k.delta}</div>
+      <div class="kpi-sub">${k.subtext||''}</div>
+    </div>`).join('');
+
+  // Insights (derived simply from first 4 KPIs if no dedicated sheet)
+  document.getElementById('insightsList').innerHTML = (d.kpis||[]).slice(0,4).map(k=>
+    `<li>${k.label}: ${k.value} (${k.delta})</li>`).join('');
+
+  const months = (d.monthlyTrend||[]).map(r=>r.month);
+  const orange='#f5811f', white='#f5f5f5', gray='#6b7077', green='#3ecf8e', grid='#26262a';
+
+  // Flow & BOD trend
+  charts.flowTrend = new Chart(document.getElementById('flowTrend'), {
+    type:'line',
+    data:{labels:months, datasets:[
+      {label:'Lưu lượng (m³)', data:(d.monthlyTrend||[]).map(r=>r.flow_m3), borderColor:orange, backgroundColor:orange, yAxisID:'y', tension:.35, pointRadius:3},
+      {label:'BOD đầu ra (mg/L)', data:(d.monthlyTrend||[]).map(r=>r.bod_effluent), borderColor:white, backgroundColor:white, yAxisID:'y1', tension:.35, pointRadius:3, borderDash:[4,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:10}}},
+      scales:{y:{grid:{color:grid},ticks:{callback:v=>(v/1000)+'K'}}, y1:{position:'right',grid:{display:false}}, x:{grid:{display:false}}}}
+  });
+
+  // Influent donut
+  const inf = d.influent||[];
+  const infColors = ['#f5811f','#d9d9d9','#8a8a8a','#4a4a4a','#c96f1a'];
+  charts.influentDonut = new Chart(document.getElementById('influentDonut'), {
+    type:'doughnut',
+    data:{labels:inf.map(r=>r.category), datasets:[{data:inf.map(r=>r.percent), backgroundColor:infColors, borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false}}}
+  });
+  document.getElementById('legend1').innerHTML = inf.map((r,i)=>
+    `<div class="item"><span><span class="dot" style="background:${infColors[i]}"></span><span class="name">${r.category}</span></span><span class="val">${r.percent}%</span></div>`).join('');
+  const totalFlow = d.kpis && d.kpis.find(k=>k.id==='flow');
+  document.getElementById('influentCenter').innerHTML = `<b>${totalFlow?totalFlow.value:'—'}</b><span>Tổng lưu lượng</span>`;
+
+  // Cost donut
+  const cost = d.costBreakdown||[];
+  charts.costDonut = new Chart(document.getElementById('costDonut'), {
+    type:'doughnut',
+    data:{labels:cost.map(r=>r.category), datasets:[{data:cost.map(r=>r.percent), backgroundColor:infColors, borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false}}}
+  });
+  document.getElementById('legend2').innerHTML = cost.map((r,i)=>
+    `<div class="item"><span><span class="dot" style="background:${infColors[i]}"></span><span class="name">${r.category}</span></span><span class="val">${r.percent}%</span></div>`).join('');
+  document.getElementById('costCenter').innerHTML = `<b>—</b><span>Tổng chi phí O&M</span>`;
+
+  // Efficiency trend
+  charts.efficiencyTrend = new Chart(document.getElementById('efficiencyTrend'), {
+    type:'line',
+    data:{labels:months, datasets:[
+      {label:'BOD', data:(d.monthlyTrend||[]).map(r=>r.bod_removal), borderColor:orange, tension:.35, pointRadius:2},
+      {label:'COD', data:(d.monthlyTrend||[]).map(r=>r.cod_removal), borderColor:white, tension:.35, pointRadius:2},
+      {label:'TSS', data:(d.monthlyTrend||[]).map(r=>r.tss_removal), borderColor:gray, tension:.35, pointRadius:2}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:10}}},
+      scales:{y:{grid:{color:grid}}, x:{grid:{display:false}}}}
+  });
+
+  // Operating summary table
+  document.getElementById('summaryBody').innerHTML = (d.operatingSummary||[]).map(r=>{
+    const cls = r.row_type==='total'?'total':(r.row_type==='sub'?'sub':'');
+    const varClass = String(r.variance_pct||'').indexOf('▼')>-1 ? 'down-txt':'up-txt';
+    return `<tr class="${cls}"><td>${r.parameter}</td><td>${r.current}</td><td>${r.previous}</td><td>${r.variance}</td><td class="${varClass}">${r.variance_pct}</td></tr>`;
+  }).join('');
+
+  // Line contribution bars
+  const lc = d.lineContribution||[];
+  const maxPct = Math.max(...lc.map(r=>Number(r.percent)||0), 1);
+  document.getElementById('lineContribution').innerHTML = lc.map(r=>`
+    <div class="bar-item"><div class="lbl">${r.line} <b>${Number(r.value_m3).toLocaleString()} (${r.percent}%)</b></div>
+    <div class="bar-track"><div class="bar-fill" style="width:${(r.percent/maxPct*100)}%;"></div></div></div>`).join('');
+
+  // Waterfall
+  const cv = d.costVariance||[];
+  let running=0; const floatData=[]; const colors=[];
+  cv.forEach(r=>{
+    const start=running; running+=Number(r.delta);
+    floatData.push([Math.min(start,running), Math.max(start,running)]);
+    colors.push(Number(r.delta)>=0? '#e5484d' : green);
+  });
+  floatData.push([0, running]); colors.push(running>=0? green : '#e5484d');
+  charts.waterfall = new Chart(document.getElementById('waterfall'), {
+    type:'bar',
+    data:{labels:cv.map(r=>r.item).concat(['Chênh lệch ròng']), datasets:[{data:floatData, backgroundColor:colors, borderRadius:4, barThickness:26}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{grid:{color:grid},ticks:{callback:v=>(v/1000)+'K'}}, x:{grid:{display:false},ticks:{font:{size:9}}}}}
+  });
+
+  // Volume by month
+  charts.volMonth = new Chart(document.getElementById('volMonth'), {
+    type:'bar',
+    data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.flow_m3), backgroundColor:orange, borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{grid:{color:grid},ticks:{callback:v=>(v/1000)+'K'}}, x:{grid:{display:false}}}}
+  });
+
+  // Chemical dosing
+  charts.chemTrend = new Chart(document.getElementById('chemTrend'), {
+    type:'line',
+    data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.chemical_kg_day), borderColor:orange, backgroundColor:'rgba(245,129,31,.15)', fill:true, tension:.35, pointRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{grid:{color:grid}}, x:{grid:{display:false}}}}
+  });
+
+  // Efficiency by month (avg BOD as headline)
+  charts.effMonth = new Chart(document.getElementById('effMonth'), {
+    type:'line',
+    data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.bod_removal), borderColor:orange, backgroundColor:orange, tension:.35, pointRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{grid:{color:grid}}, x:{grid:{display:false}}}}
+  });
+
+  // Gauge
+  const compliance = (d.compliance||[])[0] || {actual:0, target:0};
+  charts.gauge = new Chart(document.getElementById('gauge'), {
+    type:'doughnut',
+    data:{labels:['Đạt','Còn lại'], datasets:[{data:[Number(compliance.actual), Math.max(0,100-Number(compliance.actual))], backgroundColor:[orange,'#2a2a2d'], borderWidth:0, circumference:180, rotation:270}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{enabled:false}}}
+  });
+  document.getElementById('complianceLine').innerHTML =
+    `<span>Thực tế: <b style="color:var(--white)">${compliance.actual}%</b></span>
+     <span>Mục tiêu: <b style="color:var(--white)">${compliance.target}%</b></span>
+     <span>Chênh lệch: <b class="${(compliance.actual-compliance.target)>=0?'up-txt':'down-txt'}">${(compliance.actual-compliance.target).toFixed(1)} pp</b></span>`;
+}
+
+/* ================= DEMO DATA (dùng khi chưa cấu hình API) ================= */
+const DEMO_DATA = {
+  updatedAt: new Date().toISOString(),
+  kpis:[
+    {id:'flow', label:'TỔNG LƯU LƯỢNG XỬ LÝ', icon:'💧', value:'1.86M m³', delta:'▲ 8.4%', delta_type:'up', subtext:'so với 01/2025 – 05/2025'},
+    {id:'bod', label:'HIỆU SUẤT LOẠI BỎ BOD', icon:'🧪', value:'94.6%', delta:'▲ 1.4 pp', delta_type:'up', subtext:'so với 01/2025 – 05/2025'},
+    {id:'compl', label:'TỶ LỆ TUÂN THỦ XẢ THẢI', icon:'✅', value:'98.2%', delta:'▲ 0.9 pp', delta_type:'up', subtext:'so với 01/2025 – 05/2025'},
+    {id:'energy', label:'TIÊU THỤ NĂNG LƯỢNG', icon:'⚡', value:'612.4K kWh', delta:'▼ 3.6%', delta_type:'down', subtext:'so với 01/2025 – 05/2025'},
+    {id:'sludge', label:'BÙN THẢI PHÁT SINH', icon:'🪣', value:'284.6 tấn', delta:'▼ 2.8%', delta_type:'down', subtext:'so với 01/2025 – 05/2025'},
+    {id:'chem', label:'CHI PHÍ HÓA CHẤT', icon:'💰', value:'$186.2K', delta:'▲ 5.1%', delta_type:'down', subtext:'so với 01/2025 – 05/2025'}
+  ],
+  monthlyTrend:[
+    {month:'T1/26', flow_m3:352000, bod_effluent:14.8, bod_removal:92.8, cod_removal:88.9, tss_removal:94.5, chemical_kg_day:612},
+    {month:'T2/26', flow_m3:362000, bod_effluent:13.6, bod_removal:93.4, cod_removal:89.6, tss_removal:95.0, chemical_kg_day:634},
+    {month:'T3/26', flow_m3:378000, bod_effluent:12.4, bod_removal:94.0, cod_removal:90.4, tss_removal:95.5, chemical_kg_day:648},
+    {month:'T4/26', flow_m3:382000, bod_effluent:11.9, bod_removal:94.4, cod_removal:91.0, tss_removal:95.8, chemical_kg_day:662},
+    {month:'T5/26', flow_m3:386000, bod_effluent:11.8, bod_removal:94.6, cod_removal:91.4, tss_removal:96.1, chemical_kg_day:671}
+  ],
+  influent:[{category:'Sinh hoạt',percent:58},{category:'Công nghiệp',percent:27},{category:'Thẩm thấu (I&I)',percent:10},{category:'Nước mưa',percent:5}],
+  costBreakdown:[{category:'Năng lượng',percent:38},{category:'Hóa chất',percent:24},{category:'Xử lý bùn thải',percent:21},{category:'Nhân công',percent:17}],
+  operatingSummary:[
+    {parameter:'Tổng lưu lượng xử lý (m³)', current:'1,860,000', previous:'1,716,000', variance:'144,000', variance_pct:'▲8.4%', row_type:'normal'},
+    {parameter:'BOD đầu vào (mg/L)', current:'218', previous:'224', variance:'-6', variance_pct:'▲2.7%', row_type:'normal'},
+    {parameter:'BOD đầu ra (mg/L)', current:'11.8', previous:'15.2', variance:'-3.4', variance_pct:'▲22.4%', row_type:'normal'},
+    {parameter:'Hiệu suất loại bỏ BOD', current:'94.6%', previous:'93.2%', variance:'1.4 pp', variance_pct:'▲', row_type:'normal'},
+    {parameter:'Hiệu suất loại bỏ COD', current:'91.4%', previous:'89.6%', variance:'1.8 pp', variance_pct:'▲', row_type:'sub'},
+    {parameter:'Hiệu suất loại bỏ TSS', current:'96.1%', previous:'95.0%', variance:'1.1 pp', variance_pct:'▲', row_type:'sub'},
+    {parameter:'Bùn thải phát sinh (tấn)', current:'284.6', previous:'292.8', variance:'-8.2', variance_pct:'▲2.8%', row_type:'normal'},
+    {parameter:'Tiêu thụ năng lượng (kWh)', current:'612,400', previous:'635,700', variance:'-23,300', variance_pct:'▲3.6%', row_type:'normal'},
+    {parameter:'Chi phí hóa chất ($)', current:'186,200', previous:'177,100', variance:'9,100', variance_pct:'▼5.1%', row_type:'normal'},
+    {parameter:'Tỷ lệ tuân thủ xả thải', current:'98.2%', previous:'97.3%', variance:'0.9 pp', variance_pct:'▲▲', row_type:'total'}
+  ],
+  lineContribution:[
+    {line:'Dây chuyền A', value_m3:710000, percent:38.2},
+    {line:'Dây chuyền B', value_m3:540000, percent:29.0},
+    {line:'Dây chuyền C', value_m3:390000, percent:21.0},
+    {line:'Dây chuyền D', value_m3:220000, percent:11.8}
+  ],
+  costVariance:[
+    {item:'Năng lượng', delta:-23300},
+    {item:'Hóa chất', delta:9100},
+    {item:'Bùn thải', delta:-6200},
+    {item:'Nhân công', delta:3800}
+  ],
+  compliance:[{actual:98.2, target:95.0}]
+};
+</script>
+</body>
+</html>
