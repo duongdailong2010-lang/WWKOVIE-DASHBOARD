@@ -14,40 +14,20 @@
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--white);font-family:'Segoe UI', Inter, Arial, sans-serif;font-size:13px;}
 
-  /* ============ LOGIN SCREEN ============ */
-  #loginScreen{
-    position:fixed;inset:0;background:radial-gradient(circle at 30% 20%, #1c1c1f, #0a0a0b 70%);
-    display:flex;align-items:center;justify-content:center;z-index:999;
-  }
-  .login-box{
-    width:340px;background:var(--panel);border:1px solid var(--border);
-    border-radius:16px;padding:32px 28px;text-align:center;
-  }
-  .login-box .logo{
-    width:64px;height:64px;border-radius:50%;background:#111;border:2px solid var(--orange);
-    display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;
-  }
+  #loginScreen{position:fixed;inset:0;background:radial-gradient(circle at 30% 20%, #1c1c1f, #0a0a0b 70%);display:flex;align-items:center;justify-content:center;z-index:999;}
+  .login-box{width:340px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:32px 28px;text-align:center;}
+  .login-box .logo{width:64px;height:64px;border-radius:50%;background:#111;border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;}
   .login-box h2{margin:0 0 4px;font-size:16px;font-weight:800;}
   .login-box h2 span{color:var(--orange);}
   .login-box p.sub{color:var(--gray);font-size:11px;margin:0 0 22px;}
-  .login-box input{
-    width:100%;padding:11px 12px;margin-bottom:10px;border-radius:8px;
-    border:1px solid var(--border);background:var(--panel2);color:var(--white);font-size:13px;
-  }
+  .login-box input{width:100%;padding:11px 12px;margin-bottom:10px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--white);font-size:13px;}
   .login-box input:focus{outline:none;border-color:var(--orange);}
-  .login-box button{
-    width:100%;padding:11px;border:none;border-radius:8px;background:var(--orange);
-    color:#151515;font-weight:800;font-size:13px;cursor:pointer;margin-top:6px;
-  }
+  .login-box button{width:100%;padding:11px;border:none;border-radius:8px;background:var(--orange);color:#151515;font-weight:800;font-size:13px;cursor:pointer;margin-top:6px;}
   .login-box button:disabled{opacity:.6;cursor:default;}
   .login-msg{font-size:11px;color:var(--red);margin-top:10px;min-height:14px;}
   .login-demo{margin-top:14px;font-size:10.5px;color:var(--gray2);cursor:pointer;text-decoration:underline;}
-  .api-cfg{
-    margin-top:16px;font-size:9.5px;color:var(--gray2);border-top:1px solid var(--border);
-    padding-top:10px;line-height:1.5;text-align:left;
-  }
+  .api-cfg{margin-top:16px;font-size:9.5px;color:var(--gray2);border-top:1px solid var(--border);padding-top:10px;line-height:1.5;text-align:left;}
 
-  /* ============ APP LAYOUT ============ */
   .app{display:none;min-height:100vh;}
   .app.visible{display:flex;}
   .sidebar{width:210px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;}
@@ -57,18 +37,17 @@
   .brand-name span{color:var(--orange);}
   .brand-tag{font-size:10.5px;color:var(--gray);margin:10px 0 16px;line-height:1.4;}
 
-  .userbadge{
-    display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--border);
-    border-radius:10px;padding:8px 10px;margin-bottom:14px;
-  }
+  .userbadge{display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin-bottom:14px;}
   .userbadge .av{width:28px;height:28px;border-radius:50%;background:var(--orange);color:#151515;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
   .userbadge .info b{display:block;font-size:11.5px;}
   .userbadge .info span{font-size:9.5px;color:var(--gray);}
   .logout-btn{margin-left:auto;background:none;border:none;color:var(--gray2);cursor:pointer;font-size:13px;}
 
   .nav{display:flex;flex-direction:column;gap:2px;flex:1;}
-  .nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--gray);text-decoration:none;font-size:12.5px;font-weight:600;}
+  .nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--gray);text-decoration:none;font-size:12.5px;font-weight:600;cursor:pointer;user-select:none;}
+  .nav a:hover{background:var(--panel2);color:var(--white);}
   .nav a.active{background:var(--orange);color:#151515;}
+  .nav a.active:hover{background:var(--orange);}
   .nav a .ic{width:16px;text-align:center;}
 
   .insights{background:rgba(245,129,31,0.08);border:1px solid rgba(245,129,31,0.35);border-radius:10px;padding:12px;margin-top:16px;}
@@ -76,12 +55,11 @@
   .insights ul{margin:0;padding:0;list-style:none;}
   .insights li{font-size:11px;color:#d8d8d8;margin-bottom:8px;padding-left:12px;position:relative;line-height:1.4;}
   .insights li:before{content:"•";color:var(--orange);position:absolute;left:0;}
-
   .dataasof{margin-top:14px;font-size:10.5px;color:var(--gray2);display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
 
   .main{flex:1;padding:20px 24px;overflow-x:hidden;}
   .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
-  .title h1{font-size:26px;margin:0;font-weight:800;letter-spacing:.3px;}
+  .title h1{font-size:24px;margin:0;font-weight:800;letter-spacing:.3px;}
   .title h1 span{color:var(--orange);}
   .title p{margin:4px 0 0;color:var(--gray);font-size:12px;}
   .filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
@@ -100,10 +78,12 @@
   .kpi-delta.down{color:var(--red);}
   .kpi-sub{font-size:10px;color:var(--gray2);}
 
-  .row{display:grid;gap:12px;margin-bottom:12px;}
-  .row-4{grid-template-columns:repeat(4,1fr);}
-  .row-tbl{grid-template-columns:1.7fr 1fr 1fr;}
-  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;}
+  #pageTitle{margin:0 0 12px;font-size:13px;color:var(--orange);font-weight:800;letter-spacing:.4px;display:flex;align-items:center;gap:8px;}
+
+  .page-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:12px;margin-bottom:12px;}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;min-height:260px;}
+  .panel.wide{grid-column:span 2;}
+  .panel.tall{min-height:340px;}
   .panel h3{margin:0 0 10px;font-size:11.5px;letter-spacing:.5px;color:var(--orange);display:flex;align-items:center;justify-content:space-between;font-weight:800;}
   .chart-wrap{position:relative;flex:1;min-height:180px;}
   .legend{display:flex;flex-direction:column;gap:6px;margin-top:8px;font-size:10.5px;}
@@ -129,6 +109,15 @@
   .bar-track{background:#2a2a2d;border-radius:6px;height:9px;overflow:hidden;}
   .bar-fill{background:linear-gradient(90deg,var(--orange),var(--orange2));height:100%;border-radius:6px;}
 
+  .alert-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:11.5px;}
+  .alert-item.ok{background:rgba(62,207,142,.1);border:1px solid rgba(62,207,142,.35);}
+  .alert-item.warning{background:rgba(245,129,31,.1);border:1px solid rgba(245,129,31,.35);}
+  .alert-item.danger{background:rgba(229,72,77,.1);border:1px solid rgba(229,72,77,.35);}
+
+  .settings-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #232326;font-size:11.5px;}
+  .settings-row b{color:var(--white);}
+  .settings-row span{color:var(--gray);}
+
   .footer{margin-top:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:grid;grid-template-columns:1.1fr 1.1fr 1.3fr 1.1fr;gap:18px;}
   .footer .col{display:flex;gap:10px;}
   .footer .col h4{color:var(--orange);font-size:12px;margin:0 0 8px;}
@@ -138,29 +127,15 @@
   .footer .social{display:flex;gap:12px;font-size:10.5px;color:var(--gray);margin-top:6px;flex-wrap:wrap;}
   .fic{width:34px;height:34px;border-radius:50%;background:rgba(245,129,31,0.12);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:15px;flex-shrink:0;}
 
-  #loadingOverlay{
-    position:fixed;inset:0;background:rgba(10,10,11,.85);display:flex;align-items:center;justify-content:center;
-    z-index:998;color:var(--gray);font-size:13px;
-  }
+  #panelStore{display:none;}
+  #loadingOverlay{position:fixed;inset:0;background:rgba(10,10,11,.85);display:flex;align-items:center;justify-content:center;z-index:998;color:var(--gray);font-size:13px;}
 
-  @media (max-width:1000px){
-    .kpi-row{grid-template-columns:repeat(3,1fr);}
-    .row-4{grid-template-columns:repeat(2,1fr);}
-    .row-tbl{grid-template-columns:1fr;}
-    .footer{grid-template-columns:1fr 1fr;}
-  }
-  @media (max-width:640px){
-    .app.visible{flex-direction:column;}
-    .sidebar{width:100%;}
-    .kpi-row{grid-template-columns:repeat(2,1fr);}
-    .row-4{grid-template-columns:1fr;}
-    .footer{grid-template-columns:1fr;}
-  }
+  @media (max-width:1000px){ .kpi-row{grid-template-columns:repeat(3,1fr);} .footer{grid-template-columns:1fr 1fr;} .panel.wide{grid-column:span 1;} }
+  @media (max-width:640px){ .app.visible{flex-direction:column;} .sidebar{width:100%;} .kpi-row{grid-template-columns:repeat(2,1fr);} .footer{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
 
-<!-- ================= LOGIN SCREEN ================= -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="logo">💧</div>
@@ -171,16 +146,12 @@
     <button id="loginBtn" onclick="doLogin()">Đăng nhập</button>
     <div class="login-msg" id="loginMsg"></div>
     <div class="login-demo" onclick="loadDemo()">Xem thử với dữ liệu demo (bỏ qua đăng nhập)</div>
-    <div class="api-cfg">
-      🔧 Backend: <span id="apiStatus">chưa cấu hình API_URL</span><br>
-      Sửa biến <code>API_URL</code> ở đầu script để nối với Google Apps Script của bạn.
-    </div>
+    <div class="api-cfg">🔧 Backend: <span id="apiStatus">chưa cấu hình API_URL</span><br>Sửa biến <code>API_URL</code> ở đầu script để nối với Google Apps Script của bạn.</div>
   </div>
 </div>
 
 <div id="loadingOverlay" style="display:none;">⏳ Đang tải dữ liệu từ Google Sheets...</div>
 
-<!-- ================= APP ================= -->
 <div class="app" id="app">
   <div class="sidebar">
     <div class="brand">
@@ -195,27 +166,21 @@
       <button class="logout-btn" onclick="doLogout()" title="Đăng xuất">⏻</button>
     </div>
 
-    <div class="nav">
-      <a class="active"><span class="ic">🏠</span> Tổng quan</a>
-      <a><span class="ic">📊</span> Báo cáo Vận hành</a>
-      <a><span class="ic">💧</span> Phân tích Lưu lượng</a>
-      <a><span class="ic">⚙️</span> Phân tích Năng lượng</a>
-      <a><span class="ic">🧪</span> Chất lượng Xử lý</a>
-      <a><span class="ic">📈</span> Phân tích Xu hướng</a>
-      <a><span class="ic">🎯</span> Kế hoạch vs Thực tế</a>
-      <a><span class="ic">🔀</span> Phân tích Chênh lệch</a>
-      <a><span class="ic">📄</span> Báo cáo</a>
-      <a><span class="ic">🔔</span> Cảnh báo</a>
-      <a><span class="ic">⚡</span> Cài đặt</a>
+    <div class="nav" id="navMenu">
+      <a class="active" data-page="overview" onclick="showPage('overview','Tổng quan')"><span class="ic">🏠</span> Tổng quan</a>
+      <a data-page="baocao_vanhanh" onclick="showPage('baocao_vanhanh','Báo cáo Vận hành')"><span class="ic">📊</span> Báo cáo Vận hành</a>
+      <a data-page="luu_luong" onclick="showPage('luu_luong','Phân tích Lưu lượng')"><span class="ic">💧</span> Phân tích Lưu lượng</a>
+      <a data-page="nang_luong" onclick="showPage('nang_luong','Phân tích Năng lượng')"><span class="ic">⚙️</span> Phân tích Năng lượng</a>
+      <a data-page="chat_luong" onclick="showPage('chat_luong','Chất lượng Xử lý')"><span class="ic">🧪</span> Chất lượng Xử lý</a>
+      <a data-page="xu_huong" onclick="showPage('xu_huong','Phân tích Xu hướng')"><span class="ic">📈</span> Phân tích Xu hướng</a>
+      <a data-page="ke_hoach" onclick="showPage('ke_hoach','Kế hoạch vs Thực tế')"><span class="ic">🎯</span> Kế hoạch vs Thực tế</a>
+      <a data-page="chenh_lech" onclick="showPage('chenh_lech','Phân tích Chênh lệch')"><span class="ic">🔀</span> Phân tích Chênh lệch</a>
+      <a data-page="baocao" onclick="showPage('baocao','Báo cáo')"><span class="ic">📄</span> Báo cáo</a>
+      <a data-page="canh_bao" onclick="showPage('canh_bao','Cảnh báo')"><span class="ic">🔔</span> Cảnh báo</a>
+      <a data-page="cai_dat" onclick="showPage('cai_dat','Cài đặt')"><span class="ic">⚡</span> Cài đặt</a>
     </div>
 
-    <div class="insights">
-      <h4>KEY INSIGHTS</h4>
-      <ul id="insightsList">
-        <li>Đang tải insight...</li>
-      </ul>
-    </div>
-
+    <div class="insights"><h4>KEY INSIGHTS</h4><ul id="insightsList"><li>Đang tải insight...</li></ul></div>
     <div class="dataasof">📅 Cập nhật: <span id="dataAsOf">—</span></div>
   </div>
 
@@ -236,41 +201,8 @@
 
     <div class="kpi-row" id="kpiRow"></div>
 
-    <div class="row row-4">
-      <div class="panel"><h3>LƯU LƯỢNG & BOD ĐẦU RA</h3><div class="chart-wrap"><canvas id="flowTrend"></canvas></div></div>
-      <div class="panel"><h3>THÀNH PHẦN NƯỚC THẢI ĐẦU VÀO</h3>
-        <div class="chart-wrap"><canvas id="influentDonut"></canvas><div class="donut-center" id="influentCenter"><b>—</b><span>Tổng lưu lượng</span></div></div>
-        <div class="legend" id="legend1"></div>
-      </div>
-      <div class="panel"><h3>CƠ CẤU CHI PHÍ VẬN HÀNH (O&M)</h3>
-        <div class="chart-wrap"><canvas id="costDonut"></canvas><div class="donut-center" id="costCenter"><b>—</b><span>Tổng chi phí O&M</span></div></div>
-        <div class="legend" id="legend2"></div>
-      </div>
-      <div class="panel"><h3>XU HƯỚNG HIỆU SUẤT XỬ LÝ (%)</h3><div class="chart-wrap"><canvas id="efficiencyTrend"></canvas></div></div>
-    </div>
-
-    <div class="row row-tbl">
-      <div class="panel">
-        <h3>BẢNG TỔNG HỢP VẬN HÀNH (Operating Summary)</h3>
-        <table>
-          <thead><tr><th>Chỉ tiêu</th><th>Kỳ này</th><th>Kỳ trước</th><th>Chênh lệch</th><th>%</th></tr></thead>
-          <tbody id="summaryBody"></tbody>
-        </table>
-      </div>
-      <div class="panel"><h3>ĐÓNG GÓP LƯU LƯỢNG THEO DÂY CHUYỀN</h3><div id="lineContribution"></div></div>
-      <div class="panel"><h3>PHÂN TÍCH CHÊNH LỆCH CHI PHÍ (so với năm trước)</h3><div class="chart-wrap"><canvas id="waterfall"></canvas></div></div>
-    </div>
-
-    <div class="row row-4">
-      <div class="panel"><h3>LƯU LƯỢNG THEO THÁNG (m³)</h3><div class="chart-wrap"><canvas id="volMonth"></canvas></div></div>
-      <div class="panel"><h3>XU HƯỚNG LIỀU HÓA CHẤT (kg/ngày)</h3><div class="chart-wrap"><canvas id="chemTrend"></canvas></div></div>
-      <div class="panel"><h3>HIỆU SUẤT LOẠI BỎ THEO THÁNG (%)</h3><div class="chart-wrap"><canvas id="effMonth"></canvas></div></div>
-      <div class="panel">
-        <h3>TUÂN THỦ vs MỤC TIÊU (YTD)</h3>
-        <div class="chart-wrap"><canvas id="gauge"></canvas></div>
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-top:4px;" id="complianceLine"></div>
-      </div>
-    </div>
+    <h3 id="pageTitle">🏠 TỔNG QUAN</h3>
+    <div class="page-grid" id="pageContent"></div>
 
     <div class="footer">
       <div class="col"><div class="fic">🎯</div><div><h4>KEY TAKEAWAYS</h4>
@@ -284,55 +216,106 @@
         <div class="social">Đăng nhập bằng tài khoản được cấp bởi quản trị viên</div></div></div>
     </div>
   </div>
+
+  <!-- Hidden store holding all panels; moved into #pageContent depending on selected page -->
+  <div id="panelStore">
+    <div class="panel" id="panel-p1"><h3>LƯU LƯỢNG & BOD ĐẦU RA</h3><div class="chart-wrap"><canvas id="flowTrend"></canvas></div></div>
+    <div class="panel" id="panel-p2"><h3>THÀNH PHẦN NƯỚC THẢI ĐẦU VÀO</h3>
+      <div class="chart-wrap"><canvas id="influentDonut"></canvas><div class="donut-center" id="influentCenter"><b>—</b><span>Tổng lưu lượng</span></div></div>
+      <div class="legend" id="legend1"></div>
+    </div>
+    <div class="panel" id="panel-p3"><h3>CƠ CẤU CHI PHÍ VẬN HÀNH (O&M)</h3>
+      <div class="chart-wrap"><canvas id="costDonut"></canvas><div class="donut-center" id="costCenter"><b>—</b><span>Tổng chi phí O&M</span></div></div>
+      <div class="legend" id="legend2"></div>
+    </div>
+    <div class="panel" id="panel-p4"><h3>XU HƯỚNG HIỆU SUẤT XỬ LÝ (%)</h3><div class="chart-wrap"><canvas id="efficiencyTrend"></canvas></div></div>
+
+    <div class="panel wide tall" id="panel-p5">
+      <h3>BẢNG TỔNG HỢP VẬN HÀNH (Operating Summary)</h3>
+      <table><thead><tr><th>Chỉ tiêu</th><th>Kỳ này</th><th>Kỳ trước</th><th>Chênh lệch</th><th>%</th></tr></thead><tbody id="summaryBody"></tbody></table>
+    </div>
+    <div class="panel" id="panel-p6"><h3>ĐÓNG GÓP LƯU LƯỢNG THEO DÂY CHUYỀN</h3><div id="lineContribution"></div></div>
+    <div class="panel" id="panel-p7"><h3>PHÂN TÍCH CHÊNH LỆCH CHI PHÍ (so với năm trước)</h3><div class="chart-wrap"><canvas id="waterfall"></canvas></div></div>
+
+    <div class="panel" id="panel-p8"><h3>LƯU LƯỢNG THEO THÁNG (m³)</h3><div class="chart-wrap"><canvas id="volMonth"></canvas></div></div>
+    <div class="panel" id="panel-p9"><h3>XU HƯỚNG LIỀU HÓA CHẤT (kg/ngày)</h3><div class="chart-wrap"><canvas id="chemTrend"></canvas></div></div>
+    <div class="panel" id="panel-p10"><h3>HIỆU SUẤT LOẠI BỎ THEO THÁNG (%)</h3><div class="chart-wrap"><canvas id="effMonth"></canvas></div></div>
+    <div class="panel" id="panel-p11">
+      <h3>TUÂN THỦ vs MỤC TIÊU (YTD)</h3>
+      <div class="chart-wrap"><canvas id="gauge"></canvas></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-top:4px;" id="complianceLine"></div>
+    </div>
+
+    <div class="panel wide" id="panel-pAlerts"><h3>CẢNH BÁO HỆ THỐNG</h3><div id="alertsList"></div></div>
+    <div class="panel wide" id="panel-pSettings"><h3>THÔNG TIN TÀI KHOẢN & HỆ THỐNG</h3><div id="settingsList"></div></div>
+  </div>
 </div>
 
 <script>
-/* ================================================================
-   CẤU HÌNH: dán URL Web App Google Apps Script của bạn vào đây
-   Ví dụ: "https://script.google.com/macros/s/AKfycb.../exec"
-   ================================================================ */
 const API_URL = "https://script.google.com/macros/s/AKfycbzaUgl85bPHflwrUzRqikTonzI2H0UlDXUlH6Z1enOnTpMPkqcPGAQ9Fx4P6I-aJcI5/exec";
 
 let currentUser = null;
 let charts = {};
+let lastData = null;
 document.getElementById('apiStatus').textContent = isApiConfigured() ? 'đã cấu hình' : 'chưa cấu hình API_URL (đang ở chế độ demo)';
 
-function isApiConfigured(){
-  return API_URL && API_URL.indexOf('PASTE_YOUR') === -1;
+function isApiConfigured(){ return API_URL && API_URL.indexOf('PASTE_YOUR') === -1; }
+
+/* ================= NAVIGATION ================= */
+const ALL_PANEL_IDS = ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11','pAlerts','pSettings'];
+const PAGE_ICON = {overview:'🏠',baocao_vanhanh:'📊',luu_luong:'💧',nang_luong:'⚙️',chat_luong:'🧪',xu_huong:'📈',ke_hoach:'🎯',chenh_lech:'🔀',baocao:'📄',canh_bao:'🔔',cai_dat:'⚡'};
+const PAGES = {
+  overview:       ['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11'],
+  baocao_vanhanh: ['p5','p8','p11'],
+  luu_luong:      ['p1','p8','p6','p2'],
+  nang_luong:     ['p3','p9','p7'],
+  chat_luong:     ['p4','p10','p11'],
+  xu_huong:       ['p1','p4','p9','p10'],
+  ke_hoach:       ['p11','p5'],
+  chenh_lech:     ['p7','p5'],
+  baocao:         ['p5'],
+  canh_bao:       ['pAlerts'],
+  cai_dat:        ['pSettings']
+};
+
+function showPage(key, label){
+  const store = document.getElementById('panelStore');
+  const content = document.getElementById('pageContent');
+  ALL_PANEL_IDS.forEach(id=>{
+    const el = document.getElementById('panel-'+id);
+    if(el) store.appendChild(el);
+  });
+  (PAGES[key]||[]).forEach(id=>{
+    const el = document.getElementById('panel-'+id);
+    if(el) content.appendChild(el);
+  });
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+  const navEl = document.querySelector(`.nav a[data-page="${key}"]`);
+  if(navEl) navEl.classList.add('active');
+  document.getElementById('pageTitle').textContent = (PAGE_ICON[key]||'📌') + ' ' + (label||'').toUpperCase();
+  // fix chart sizing after being moved/re-shown
+  requestAnimationFrame(()=>{
+    Object.values(charts).forEach(c=>{ try{ c.resize(); }catch(e){} });
+  });
 }
 
+/* ================= LOGIN ================= */
 async function doLogin(){
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value.trim();
   const msg = document.getElementById('loginMsg');
   const btn = document.getElementById('loginBtn');
   msg.textContent = '';
-
   if(!username || !password){ msg.textContent = 'Vui lòng nhập đầy đủ tài khoản và mật khẩu'; return; }
-
-  if(!isApiConfigured()){
-    msg.textContent = 'Chưa cấu hình API_URL — bấm "Xem thử với dữ liệu demo" bên dưới để dùng thử.';
-    return;
-  }
+  if(!isApiConfigured()){ msg.textContent = 'Chưa cấu hình API_URL — bấm "Xem thử với dữ liệu demo" bên dưới.'; return; }
 
   btn.disabled = true; btn.textContent = 'Đang kiểm tra...';
   try{
-    const res = await fetch(API_URL, {
-      method:'POST',
-      headers:{'Content-Type':'text/plain;charset=utf-8'}, // tránh CORS preflight với Apps Script
-      body: JSON.stringify({action:'login', username, password})
-    });
+    const res = await fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({action:'login', username, password})});
     const data = await res.json();
-    if(data.success){
-      currentUser = data;
-      enterApp();
-      await loadRealData();
-    } else {
-      msg.textContent = data.message || 'Sai tài khoản hoặc mật khẩu';
-    }
-  }catch(err){
-    msg.textContent = 'Không kết nối được tới Apps Script. Kiểm tra lại URL / quyền deploy.';
-  }
+    if(data.success){ currentUser = data; enterApp(); await loadRealData(); }
+    else { msg.textContent = data.message || 'Sai tài khoản hoặc mật khẩu'; }
+  }catch(err){ msg.textContent = 'Không kết nối được tới Apps Script. Kiểm tra lại URL / quyền deploy.'; }
   btn.disabled = false; btn.textContent = 'Đăng nhập';
 }
 
@@ -348,6 +331,7 @@ function enterApp(){
   document.getElementById('userName').textContent = currentUser.fullname || currentUser.username;
   document.getElementById('userRole').textContent = currentUser.role || '';
   document.getElementById('userAv').textContent = (currentUser.fullname || currentUser.username || '?').charAt(0).toUpperCase();
+  showPage('overview','Tổng quan');
 }
 
 function doLogout(){
@@ -356,8 +340,7 @@ function doLogout(){
   charts = {};
   document.getElementById('app').classList.remove('visible');
   document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('username').value='';
-  document.getElementById('password').value='';
+  document.getElementById('username').value=''; document.getElementById('password').value='';
 }
 
 async function loadRealData(){
@@ -375,16 +358,55 @@ async function loadRealData(){
 
 function refreshData(){
   if(isApiConfigured() && currentUser && currentUser.username !== 'demo'){ loadRealData(); }
+  else if(lastData){ renderDashboard(lastData); }
 }
 
-/* ================= RENDER DASHBOARD FROM DATA OBJECT ================= */
+/* ================= ALERTS & SETTINGS ================= */
+function buildAlerts(d){
+  const alerts = [];
+  (d.kpis||[]).forEach(k=>{
+    if(k.delta_type==='down' && String(k.delta).indexOf('▲')>-1){
+      alerts.push({level:'warning', text:`⚠️ ${k.label} tăng ${k.delta} — cần theo dõi và tối ưu.`});
+    }
+  });
+  const comp = (d.compliance||[])[0];
+  if(comp){
+    if(Number(comp.actual) < Number(comp.target)){
+      alerts.push({level:'danger', text:`🔴 Tỷ lệ tuân thủ (${comp.actual}%) đang THẤP HƠN mục tiêu (${comp.target}%).`});
+    } else {
+      alerts.push({level:'ok', text:`✅ Tỷ lệ tuân thủ (${comp.actual}%) đang đạt/vượt mục tiêu (${comp.target}%).`});
+    }
+  }
+  if(alerts.length===0) alerts.push({level:'ok', text:'✅ Không có cảnh báo nào ở thời điểm hiện tại.'});
+  return alerts;
+}
+
+function renderAlerts(d){
+  const alerts = buildAlerts(d);
+  document.getElementById('alertsList').innerHTML = alerts.map(a=>
+    `<div class="alert-item ${a.level}">${a.text}</div>`).join('');
+}
+
+function renderSettings(){
+  const rows = [
+    ['Tài khoản', currentUser ? (currentUser.username||'—') : '—'],
+    ['Họ tên', currentUser ? (currentUser.fullname||'—') : '—'],
+    ['Vai trò', currentUser ? (currentUser.role||'—') : '—'],
+    ['Trạng thái Backend', isApiConfigured() ? 'Đã kết nối Google Apps Script' : 'Chưa cấu hình (chế độ demo)'],
+    ['Thiết bị hỗ trợ', 'Điện thoại · iPad · Laptop (mọi trình duyệt)']
+  ];
+  document.getElementById('settingsList').innerHTML = rows.map(r=>
+    `<div class="settings-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
+}
+
+/* ================= RENDER DASHBOARD ================= */
 function renderDashboard(d){
+  lastData = d;
   Object.values(charts).forEach(c=>c.destroy());
   charts = {};
 
   document.getElementById('dataAsOf').textContent = d.updatedAt ? new Date(d.updatedAt).toLocaleDateString('vi-VN') : '—';
 
-  // KPIs
   const kpiRow = document.getElementById('kpiRow');
   kpiRow.innerHTML = (d.kpis||[]).map(k=>`
     <div class="kpi">
@@ -394,14 +416,12 @@ function renderDashboard(d){
       <div class="kpi-sub">${k.subtext||''}</div>
     </div>`).join('');
 
-  // Insights (derived simply from first 4 KPIs if no dedicated sheet)
   document.getElementById('insightsList').innerHTML = (d.kpis||[]).slice(0,4).map(k=>
     `<li>${k.label}: ${k.value} (${k.delta})</li>`).join('');
 
   const months = (d.monthlyTrend||[]).map(r=>r.month);
   const orange='#f5811f', white='#f5f5f5', gray='#6b7077', green='#3ecf8e', grid='#26262a';
 
-  // Flow & BOD trend
   charts.flowTrend = new Chart(document.getElementById('flowTrend'), {
     type:'line',
     data:{labels:months, datasets:[
@@ -413,12 +433,10 @@ function renderDashboard(d){
       scales:{y:{grid:{color:grid},ticks:{callback:v=>(v/1000)+'K'}}, y1:{position:'right',grid:{display:false}}, x:{grid:{display:false}}}}
   });
 
-  // Influent donut
   const inf = d.influent||[];
   const infColors = ['#f5811f','#d9d9d9','#8a8a8a','#4a4a4a','#c96f1a'];
   charts.influentDonut = new Chart(document.getElementById('influentDonut'), {
-    type:'doughnut',
-    data:{labels:inf.map(r=>r.category), datasets:[{data:inf.map(r=>r.percent), backgroundColor:infColors, borderWidth:0}]},
+    type:'doughnut', data:{labels:inf.map(r=>r.category), datasets:[{data:inf.map(r=>r.percent), backgroundColor:infColors, borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false}}}
   });
   document.getElementById('legend1').innerHTML = inf.map((r,i)=>
@@ -426,18 +444,15 @@ function renderDashboard(d){
   const totalFlow = d.kpis && d.kpis.find(k=>k.id==='flow');
   document.getElementById('influentCenter').innerHTML = `<b>${totalFlow?totalFlow.value:'—'}</b><span>Tổng lưu lượng</span>`;
 
-  // Cost donut
   const cost = d.costBreakdown||[];
   charts.costDonut = new Chart(document.getElementById('costDonut'), {
-    type:'doughnut',
-    data:{labels:cost.map(r=>r.category), datasets:[{data:cost.map(r=>r.percent), backgroundColor:infColors, borderWidth:0}]},
+    type:'doughnut', data:{labels:cost.map(r=>r.category), datasets:[{data:cost.map(r=>r.percent), backgroundColor:infColors, borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false}}}
   });
   document.getElementById('legend2').innerHTML = cost.map((r,i)=>
     `<div class="item"><span><span class="dot" style="background:${infColors[i]}"></span><span class="name">${r.category}</span></span><span class="val">${r.percent}%</span></div>`).join('');
   document.getElementById('costCenter').innerHTML = `<b>—</b><span>Tổng chi phí O&M</span>`;
 
-  // Efficiency trend
   charts.efficiencyTrend = new Chart(document.getElementById('efficiencyTrend'), {
     type:'line',
     data:{labels:months, datasets:[
@@ -450,75 +465,63 @@ function renderDashboard(d){
       scales:{y:{grid:{color:grid}}, x:{grid:{display:false}}}}
   });
 
-  // Operating summary table
   document.getElementById('summaryBody').innerHTML = (d.operatingSummary||[]).map(r=>{
     const cls = r.row_type==='total'?'total':(r.row_type==='sub'?'sub':'');
     const varClass = String(r.variance_pct||'').indexOf('▼')>-1 ? 'down-txt':'up-txt';
     return `<tr class="${cls}"><td>${r.parameter}</td><td>${r.current}</td><td>${r.previous}</td><td>${r.variance}</td><td class="${varClass}">${r.variance_pct}</td></tr>`;
   }).join('');
 
-  // Line contribution bars
   const lc = d.lineContribution||[];
   const maxPct = Math.max(...lc.map(r=>Number(r.percent)||0), 1);
   document.getElementById('lineContribution').innerHTML = lc.map(r=>`
     <div class="bar-item"><div class="lbl">${r.line} <b>${Number(r.value_m3).toLocaleString()} (${r.percent}%)</b></div>
     <div class="bar-track"><div class="bar-fill" style="width:${(r.percent/maxPct*100)}%;"></div></div></div>`).join('');
 
-  // Waterfall
   const cv = d.costVariance||[];
   let running=0; const floatData=[]; const colors=[];
-  cv.forEach(r=>{
-    const start=running; running+=Number(r.delta);
-    floatData.push([Math.min(start,running), Math.max(start,running)]);
-    colors.push(Number(r.delta)>=0? '#e5484d' : green);
-  });
+  cv.forEach(r=>{ const start=running; running+=Number(r.delta); floatData.push([Math.min(start,running), Math.max(start,running)]); colors.push(Number(r.delta)>=0? '#e5484d' : green); });
   floatData.push([0, running]); colors.push(running>=0? green : '#e5484d');
   charts.waterfall = new Chart(document.getElementById('waterfall'), {
-    type:'bar',
-    data:{labels:cv.map(r=>r.item).concat(['Chênh lệch ròng']), datasets:[{data:floatData, backgroundColor:colors, borderRadius:4, barThickness:26}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
+    type:'bar', data:{labels:cv.map(r=>r.item).concat(['Chênh lệch ròng']), datasets:[{data:floatData, backgroundColor:colors, borderRadius:4, barThickness:26}]},
+    options:{responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false}},
       scales:{y:{grid:{color:grid},ticks:{callback:v=>(v/1000)+'K'}}, x:{grid:{display:false},ticks:{font:{size:9}}}}}
   });
 
-  // Volume by month
   charts.volMonth = new Chart(document.getElementById('volMonth'), {
-    type:'bar',
-    data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.flow_m3), backgroundColor:orange, borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{y:{grid:{color:grid},ticks:{callback:v=>(v/1000)+'K'}}, x:{grid:{display:false}}}}
+    type:'bar', data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.flow_m3), backgroundColor:orange, borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}, scales:{y:{grid:{color:grid},ticks:{callback:v=>(v/1000)+'K'}}, x:{grid:{display:false}}}}
   });
 
-  // Chemical dosing
   charts.chemTrend = new Chart(document.getElementById('chemTrend'), {
-    type:'line',
-    data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.chemical_kg_day), borderColor:orange, backgroundColor:'rgba(245,129,31,.15)', fill:true, tension:.35, pointRadius:3}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{y:{grid:{color:grid}}, x:{grid:{display:false}}}}
+    type:'line', data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.chemical_kg_day), borderColor:orange, backgroundColor:'rgba(245,129,31,.15)', fill:true, tension:.35, pointRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}, scales:{y:{grid:{color:grid}}, x:{grid:{display:false}}}}
   });
 
-  // Efficiency by month (avg BOD as headline)
   charts.effMonth = new Chart(document.getElementById('effMonth'), {
-    type:'line',
-    data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.bod_removal), borderColor:orange, backgroundColor:orange, tension:.35, pointRadius:3}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{y:{grid:{color:grid}}, x:{grid:{display:false}}}}
+    type:'line', data:{labels:months, datasets:[{data:(d.monthlyTrend||[]).map(r=>r.bod_removal), borderColor:orange, backgroundColor:orange, tension:.35, pointRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}, scales:{y:{grid:{color:grid}}, x:{grid:{display:false}}}}
   });
 
-  // Gauge
   const compliance = (d.compliance||[])[0] || {actual:0, target:0};
   charts.gauge = new Chart(document.getElementById('gauge'), {
-    type:'doughnut',
-    data:{labels:['Đạt','Còn lại'], datasets:[{data:[Number(compliance.actual), Math.max(0,100-Number(compliance.actual))], backgroundColor:[orange,'#2a2a2d'], borderWidth:0, circumference:180, rotation:270}]},
+    type:'doughnut', data:{labels:['Đạt','Còn lại'], datasets:[{data:[Number(compliance.actual), Math.max(0,100-Number(compliance.actual))], backgroundColor:[orange,'#2a2a2d'], borderWidth:0, circumference:180, rotation:270}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{enabled:false}}}
   });
   document.getElementById('complianceLine').innerHTML =
     `<span>Thực tế: <b style="color:var(--white)">${compliance.actual}%</b></span>
      <span>Mục tiêu: <b style="color:var(--white)">${compliance.target}%</b></span>
      <span>Chênh lệch: <b class="${(compliance.actual-compliance.target)>=0?'up-txt':'down-txt'}">${(compliance.actual-compliance.target).toFixed(1)} pp</b></span>`;
+
+  renderAlerts(d);
+  renderSettings();
+
+  // re-apply currently selected page (default overview on first render)
+  const activeNav = document.querySelector('.nav a.active');
+  const activeKey = activeNav ? activeNav.getAttribute('data-page') : 'overview';
+  showPage(activeKey, activeNav ? activeNav.textContent.trim() : 'Tổng quan');
 }
 
-/* ================= DEMO DATA (dùng khi chưa cấu hình API) ================= */
+/* ================= DEMO DATA ================= */
 const DEMO_DATA = {
   updatedAt: new Date().toISOString(),
   kpis:[
@@ -551,17 +554,10 @@ const DEMO_DATA = {
     {parameter:'Tỷ lệ tuân thủ xả thải', current:'98.2%', previous:'97.3%', variance:'0.9 pp', variance_pct:'▲▲', row_type:'total'}
   ],
   lineContribution:[
-    {line:'Dây chuyền A', value_m3:710000, percent:38.2},
-    {line:'Dây chuyền B', value_m3:540000, percent:29.0},
-    {line:'Dây chuyền C', value_m3:390000, percent:21.0},
-    {line:'Dây chuyền D', value_m3:220000, percent:11.8}
+    {line:'Dây chuyền A', value_m3:710000, percent:38.2}, {line:'Dây chuyền B', value_m3:540000, percent:29.0},
+    {line:'Dây chuyền C', value_m3:390000, percent:21.0}, {line:'Dây chuyền D', value_m3:220000, percent:11.8}
   ],
-  costVariance:[
-    {item:'Năng lượng', delta:-23300},
-    {item:'Hóa chất', delta:9100},
-    {item:'Bùn thải', delta:-6200},
-    {item:'Nhân công', delta:3800}
-  ],
+  costVariance:[{item:'Năng lượng', delta:-23300},{item:'Hóa chất', delta:9100},{item:'Bùn thải', delta:-6200},{item:'Nhân công', delta:3800}],
   compliance:[{actual:98.2, target:95.0}]
 };
 </script>
